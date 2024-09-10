@@ -91,8 +91,6 @@ paths:
                   $ref: "#/components/schemas/tenderDescription"
                 serviceType:
                   $ref: "#/components/schemas/tenderServiceType"
-                status:
-                  $ref: "#/components/schemas/tenderStatus"
                 organizationId:
                   $ref: "#/components/schemas/organizationId"
                 creatorUsername:
@@ -101,7 +99,6 @@ paths:
                 - name
                 - description
                 - serviceType
-                - status
                 - organizationId
                 - creatorUsername
       responses:
@@ -385,21 +382,18 @@ paths:
                   $ref: "#/components/schemas/bidName"
                 description:
                   $ref: "#/components/schemas/bidDescription"
-                status:
-                  $ref: "#/components/schemas/bidStatus"
                 tenderId:
                   $ref: "#/components/schemas/tenderId"
-                organizationId:
-                  $ref: "#/components/schemas/organizationId"
-                creatorUsername:
-                  $ref: "#/components/schemas/username"
+                authorType:
+                  $ref: "#/components/schemas/bidAuthorType"
+                authorId:
+                  $ref: "#/components/schemas/bidAuthorId"
               required:
                 - name
                 - description
-                - status
                 - tenderId
-                - organizationId
-                - creatorUsername
+                - authorType
+                - authorId
       responses:
         "200":
           description: Предложение успешно создано. Сервер присваивает уникальный идентификатор и время создания.
@@ -970,7 +964,7 @@ components:
         description: Нужно доставить оборудовоние для олимпиады по робототехники
         status: Created
         serviceType: Delivery
-        verstion: 1
+        version: 1
         createdAt: 2006-01-02T15:04:05Z07:00
     bidStatus:
       type: string
@@ -1095,7 +1089,7 @@ components:
         status: Created
         authorType: User
         authorId: 61a485f0-e29b-41d4-a716-446655440000
-        verstion: 1
+        version: 1
         createdAt: 2006-01-02T15:04:05Z07:00
         
     errorResponse:
