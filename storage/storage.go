@@ -2,12 +2,11 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/gofrs/uuid"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -22,19 +21,10 @@ func NewStorage(ctx context.Context) (*Storage, error) {
 		return nil, err
 	}
 
-	cfg := pgconn.Config{
-		Host:     os.Getenv("POSTGRES_HOST"),
-		Port:     uint16(port),
-		Database: os.Getenv("POSTGRES_DATABASE"),
-		User:     os.Getenv("POSTGRES_USERNAME"),
-		Password: os.Getenv("POSTGRES_PASSWORD"),
-	}
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
+		os.Getenv("POSTGRES_HOST"), port, os.Getenv("POSTGRES_USERNAME"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DATABASE"))
 
-	conn, err := pgxpool.NewWithConfig(ctx, &pgxpool.Config{
-		ConnConfig: &pgx.ConnConfig{
-			Config: cfg,
-		},
-	})
+	conn, err := pgxpool.New(ctx, psqlInfo)
 	if err != nil {
 		return nil, err
 	}
