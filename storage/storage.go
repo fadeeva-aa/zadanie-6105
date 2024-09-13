@@ -3,8 +3,11 @@ package storage
 import (
 	"context"
 	"os"
+	"strconv"
 
 	"github.com/gofrs/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -14,7 +17,24 @@ type Storage struct {
 
 func NewStorage(ctx context.Context) (*Storage, error) {
 
-	conn, err := pgxpool.New(ctx, os.Getenv("POSTGRES_CONN"))
+	port, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := pgconn.Config{
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     uint16(port),
+		Database: os.Getenv("POSTGRES_DATABASE"),
+		User:     os.Getenv("POSTGRES_USERNAME"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+	}
+
+	conn, err := pgxpool.NewWithConfig(ctx, &pgxpool.Config{
+		ConnConfig: &pgx.ConnConfig{
+			Config: cfg,
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
