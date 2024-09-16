@@ -11,7 +11,7 @@ import (
 
 func create(ctx context.Context, conn *pgxpool.Pool) error {
 
-	file, err := os.ReadFile("./scripts/create.sql")
+	file, err := os.ReadFile("./scripts/init.sql")
 	if err != nil {
 		return err
 	}
